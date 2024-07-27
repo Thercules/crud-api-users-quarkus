@@ -9,7 +9,7 @@ import org.acme.hercules.repository.UserRepository;
 import java.util.List;
 
 @ApplicationScoped
-public class UserService {
+public class UserService implements UserServiceInterface {
 
     @Inject
     UserRepository userRepository;
@@ -26,11 +26,13 @@ public class UserService {
 
     @Transactional
     public void createUser(User user) {
+        user.encryptSensitiveData();
         userRepository.addUser(user);
     }
 
     @Transactional
     public void updateUser(User user) {
+        user.encryptSensitiveData();
         userRepository.updateUser(user);
     }
 
