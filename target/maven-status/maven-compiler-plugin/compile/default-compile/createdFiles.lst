@@ -1,0 +1,7 @@
+org\acme\hercules\repository\UserRepository.class
+org\acme\hercules\repository\UserRepositoryInterface.class
+org\acme\hercules\entity\User.class
+org\acme\hercules\services\UserService.class
+org\acme\hercules\resources\UserResource.class
+org\acme\hercules\services\UserServiceInterface.class
+org\acme\hercules\Main.class

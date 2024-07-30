@@ -1,6 +1,7 @@
 package org.acme.hercules.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 
 import java.security.MessageDigest;
@@ -15,17 +16,34 @@ public class User extends PanacheEntityBase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long id;
 
+    @NotBlank(message = "Name cannot be blank")
     public String name;
+
+    // @Email(message = "Email should be valid")
+    @NotBlank(message = "Email cannot be blank")
     public String email;
+
+    @NotBlank(message = "Password cannot be blank")
+    @Size(min = 6, message = "Password must be at least 6 characters long")
     public String password;
+
+    @NotBlank(message = "CPF cannot be blank")
+    //  @Pattern(regexp = "\\d{11}", message = "CPF should be exactly 11 digits")
     public String cpf;
+
+    @NotBlank(message = "RG cannot be blank")
     public String rg;
+
+    @NotBlank(message = "Address cannot be blank")
     public String address;
 
     @Column(length = 20) // Adjust the length as needed
+    @NotBlank(message = "Phone number cannot be blank")
     public String phoneNumber;
 
+    @Past(message = "Date of birth must be in the past")
     public LocalDate dateOfBirth;
+
     public String gender;
     public String role;
     public boolean isActive;

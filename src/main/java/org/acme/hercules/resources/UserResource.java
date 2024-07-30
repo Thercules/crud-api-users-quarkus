@@ -4,10 +4,15 @@ import org.acme.hercules.entity.User;
 import org.acme.hercules.services.UserServiceInterface;
 
 import jakarta.inject.Inject;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,19 +38,28 @@ public class UserResource {
     }
 
     @POST
-    public Response createUser(User user) {
-        userService.createUser(user);
-        return Response.status(Response.Status.CREATED).build();
+    public Response createUser(@Valid User user) {
+        user.cpf = user.cpf.replaceAll("[^\\d]", "");  // Remove non-digit characters
+        try {
+            userService.createUser(user);
+            return Response.status(Response.Status.CREATED).build();
+        } catch (ConstraintViolationException e) {
+            return handleValidationException(e);
+        }
     }
 
     @PUT
-    public Response updateUser(User user) {
+    public Response updateUser(@Valid User user) {
         User existingUser = userService.findUserById(user.id);
         if (existingUser == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        userService.updateUser(user);
-        return Response.ok().build();
+        try {
+            userService.updateUser(user);
+            return Response.ok().build();
+        } catch (ConstraintViolationException e) {
+            return handleValidationException(e);
+        }
     }
 
     @DELETE
@@ -57,5 +71,13 @@ public class UserResource {
         }
         userService.deleteUser(id);
         return Response.noContent().build();
+    }
+
+    private Response handleValidationException(ConstraintViolationException e) {
+        Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+        List<String> validationMessages = violations.stream()
+                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+                .collect(Collectors.toList());
+        return Response.status(Response.Status.BAD_REQUEST).entity(validationMessages).build();
     }
 }
