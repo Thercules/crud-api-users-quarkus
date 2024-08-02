@@ -47,6 +47,7 @@ public class User extends PanacheEntityBase {
     public String gender;
     public String role;
     public boolean isActive;
+    public int ambiente;
 
     public void encryptSensitiveData() {
         this.name = encrypt(name);
