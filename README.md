@@ -1,77 +1,224 @@
-# thiago-code
+
+# CRUD-Solicitação Serviços
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Installation and Setup
 
-## Running the application in dev mode
+### IntelliJ Community Edition
 
-You can run your application in dev mode that enables live coding using:
+1. Download and install [IntelliJ Community Edition](https://www.jetbrains.com/idea/download/).
+2. Configure IntelliJ to use JDK 22 by going to **File > Project Structure > Project > Project SDK** and adding JDK 22.
+![IntelliJ Screenshot](https://i.ibb.co/pjL8gPw/print-intellij.png)
 
-```shell script
+### Maven
+
+1. Download Maven from the [official site](https://maven.apache.org/download.cgi).
+2. Extract the archive and set the `M2_HOME` environment variable to the extracted directory.
+3. Add `M2_HOME/bin` to your system `PATH`.
+
+### JDK 22
+
+1. Download JDK 22 from the [official Oracle website](https://www.oracle.com/java/technologies/javase-jdk22-downloads.html) or use [OpenJDK](https://jdk.java.net/22).
+2. Set the `JAVA_HOME` environment variable to the JDK installation directory.
+3. Add `JAVA_HOME/bin` to your system `PATH`.
+
+### MySQL
+
+1. Install MySQL following the instructions on [MySQL's official website](https://dev.mysql.com/doc/mysql-installation-excerpt/).
+2. Create a database for the application.
+3. Configure your `application.properties` file in Quarkus to connect to your MySQL instance.
+
+### Docker
+
+1. Install Docker following the instructions on [Docker's official website](https://docs.docker.com/get-docker/).
+2. Use Docker to run MySQL and your application containers.
+![Docker Screenshot](https://i.ibb.co/3zqZV0L/print-docker.png)
+
+## Project Overview
+
+This project is a modern CRUD API built with SOLID principles using:
+- JDK 22
+- Quarkus 3.12.3
+- Maven 3.9.8
+- MySQL
+- Docker 4.32.0
+
+It includes endpoints for managing services, users, and service requests.
+
+## Running the Application
+
+### Development Mode
+
+To run the application in development mode with live coding enabled:
+
+```shell
 ./mvnw compile quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+> **_NOTE:_** Quarkus now ships with a Dev UI, which is available in dev mode only at [http://localhost:8080/q/dev/](http://localhost:8080/q/dev/).
 
-## Packaging and running the application
+### Packaging and Running the Application
 
-The application can be packaged using:
+To package the application:
 
-```shell script
+```shell
 ./mvnw package
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+This produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory. It’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory. You can run the application using:
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+```shell
+java -jar target/quarkus-app/quarkus-run.jar
+```
 
-If you want to build an _über-jar_, execute the following command:
+To build an _über-jar_:
 
-```shell script
+```shell
 ./mvnw package -Dquarkus.package.jar.type=uber-jar
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+Run the _über-jar_ with:
 
-## Creating a native executable
+```shell
+java -jar target/*-runner.jar
+```
 
-You can create a native executable using:
+### Creating a Native Executable
 
-```shell script
+To create a native executable:
+
+```shell
 ./mvnw package -Dnative
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+Or, if you don't have GraalVM installed, use a container for the native build:
 
-```shell script
+```shell
 ./mvnw package -Dnative -Dquarkus.native.container-build=true
 ```
 
-You can then execute your native executable with: `./target/thiago-code-1.0.0-SNAPSHOT-runner`
+Run your native executable with:
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+```shell
+./target/thiago-code-1.0.0-SNAPSHOT-runner
+```
+
+For more information on native executables, consult [Quarkus Native Guide](https://quarkus.io/guides/maven-tooling).
+
+## API Endpoints
+
+### Services
+
+- **GET /servicos**  
+  Retrieve all services.
+![VSCode Screenshot](https://i.ibb.co/4P11k88/print-vscode.png)
+
+- **GET /servicos/{id}**  
+  Retrieve a specific service by ID.
+
+- **POST /servicos**  
+  Create a new service.  
+  **Request Body Example:**
+  ```json
+  {
+    "id": 1,
+    "name": "Service Name",
+    "description": "Service Description"
+  }
+  ```
+
+- **PUT /servicos**  
+  Update an existing service.  
+  **Request Body Example:**
+  ```json
+  {
+    "id": 1,
+    "name": "Updated Service Name",
+    "description": "Updated Description"
+  }
+  ```
+
+- **DELETE /servicos/{id}**  
+  Delete a service by ID.
+
+### Users
+
+- **GET /users**  
+  Retrieve all users.
+
+- **GET /users/{id}**  
+  Retrieve a specific user by ID.
+
+- **POST /users**  
+  Create a new user.  
+  **Request Body Example:**
+  ```json
+  {
+    "id": 1,
+    "name": "User Name",
+    "cpf": "12345678901"
+  }
+  ```
+
+- **PUT /users**  
+  Update an existing user.  
+  **Request Body Example:**
+  ```json
+  {
+    "id": 1,
+    "name": "Updated User Name",
+    "cpf": "09876543210"
+  }
+  ```
+
+- **DELETE /users/{id}**  
+  Delete a user by ID.
+
+### Service Requests
+
+- **POST /solicitacoesServicos**  
+  Create a new service request.  
+  **Request Body Example:**
+  ```json
+  {
+    "userId": 1,
+    "servicoId": 2,
+    "status": "PENDING"
+  }
+  ```
+
+- **GET /solicitacoesServicos**  
+  Retrieve all service requests.
+
+- **GET /solicitacoesServicos/{id}**  
+  Retrieve a specific service request by ID.
+
+- **PUT /solicitacoesServicos/{id}**  
+  Update the status of a service request.  
+  **Request Body Example:**
+  ```json
+  {
+    "status": "COMPLETED"
+  }
+  ```
+
+- **DELETE /solicitacoesServicos/{id}**  
+  Delete a service request by ID.
+![Insomnia Screenshot](https://i.ibb.co/RH1rmP9/print-insomnia.png)
 
 ## Related Guides
 
-- REST resources for Hibernate ORM with Panache ([guide](https://quarkus.io/guides/rest-data-panache)): Generate Jakarta REST resources for your Hibernate Panache entities and repositories
-- RESTEasy Classic's REST Client JSON-B ([guide](https://quarkus.io/guides/resteasy-client)): JSON-B serialization support for the REST client
-- RESTEasy Classic ([guide](https://quarkus.io/guides/resteasy)): REST endpoint framework implementing Jakarta REST and more
-- JDBC Driver - MySQL ([guide](https://quarkus.io/guides/datasource)): Connect to the MySQL database via JDBC
-- Security JPA ([guide](https://quarkus.io/guides/security-getting-started)): Secure your applications with username/password stored in a database via Jakarta Persistence
+- [REST Data with Panache](https://quarkus.io/guides/rest-data-panache): Generate Jakarta REST resources for your Hibernate Panache entities and repositories.
+- [RESTEasy Classic's REST Client JSON-B](https://quarkus.io/guides/resteasy-client): JSON-B serialization support for the REST client.
+- [RESTEasy Classic](https://quarkus.io/guides/resteasy): REST endpoint framework implementing Jakarta REST and more.
+- [JDBC Driver - MySQL](https://quarkus.io/guides/datasource): Connect to the MySQL database via JDBC.
+- [Security JPA](https://quarkus.io/guides/security-getting-started): Secure your applications with username/password stored in a database via Jakarta Persistence.
 
-## Provided Code
+## Frontend Preview
 
-### REST Data with Panache
+![Frontend Preview](https://i.ibb.co/YQgtK2X/print-front.jpg)
 
-Generating Jakarta REST resources with Panache
+## Author
 
-[Related guide section...](https://quarkus.io/guides/rest-data-panache)
-
-
-### RESTEasy JAX-RS
-
-Easily start your RESTful Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started#the-jax-rs-resources)
+Thiago-Hercules
