@@ -5,35 +5,88 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 ## Installation and Setup
 
-### IntelliJ Community Edition
+### Back-end
+
+#### IntelliJ Community Edition
 
 1. Download and install [IntelliJ Community Edition](https://www.jetbrains.com/idea/download/).
 2. Configure IntelliJ to use JDK 22 by going to **File > Project Structure > Project > Project SDK** and adding JDK 22.
 ![IntelliJ Screenshot](https://i.ibb.co/pjL8gPw/print-intellij.png)
 
-### Maven
+#### Maven
 
 1. Download Maven from the [official site](https://maven.apache.org/download.cgi).
 2. Extract the archive and set the `M2_HOME` environment variable to the extracted directory.
 3. Add `M2_HOME/bin` to your system `PATH`.
 
-### JDK 22
+#### JDK 22
 
 1. Download JDK 22 from the [official Oracle website](https://www.oracle.com/java/technologies/javase-jdk22-downloads.html) or use [OpenJDK](https://jdk.java.net/22).
 2. Set the `JAVA_HOME` environment variable to the JDK installation directory.
 3. Add `JAVA_HOME/bin` to your system `PATH`.
 
-### MySQL
+#### MySQL
 
 1. Install MySQL following the instructions on [MySQL's official website](https://dev.mysql.com/doc/mysql-installation-excerpt/).
 2. Create a database for the application.
 3. Configure your `application.properties` file in Quarkus to connect to your MySQL instance.
 
-### Docker
+#### Docker
 
 1. Install Docker following the instructions on [Docker's official website](https://docs.docker.com/get-docker/).
 2. Use Docker to run MySQL and your application containers.
 ![Docker Screenshot](https://i.ibb.co/3zqZV0L/print-docker.png)
+
+### Front-end
+
+#### Node.js
+
+1. Download and install the latest version of Node.js from the [official website](https://nodejs.org/).
+2. Verify the installation by running:
+   ```shell
+   node -v
+   npm -v
+   ```
+
+#### VSCode
+
+1. Download and install [Visual Studio Code](https://code.visualstudio.com/).
+2. Open your project in VSCode.
+
+#### Vue.js 2
+
+1. Install Vue CLI globally by running:
+   ```shell
+   npm install -g @vue/cli@4.5.15
+   ```
+2. Create a new Vue.js 2 project or navigate to your existing project directory and install dependencies:
+   ```shell
+   npm install
+   ```
+3. Configure your vue.config.js for the port you want and set up a proxy layer to the port where your API is running to avoid CORS issues:
+   ```shell
+   const { defineConfig } = require('@vue/cli-service')
+
+	module.exports = defineConfig({
+	  transpileDependencies: true,
+	  devServer: {
+		port: 8084,
+		proxy: {
+		  '/api': {
+			target: 'http://localhost:8080', // Port where your API is running
+			changeOrigin: true,
+			pathRewrite: { '^/api': '' },
+		  },
+		},
+	  },
+	}) 
+   ```
+4. Run the Vue.js development server on port 8084:
+   ```shell
+   npm run serve 
+   ```
+
+> **_NOTE:_** Ensure your front-end runs on port 8084, while your API runs on port 8080 using Docker to avoid conflicts.
 
 ## Project Overview
 
